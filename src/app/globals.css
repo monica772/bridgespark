@@ -1,0 +1,63 @@
+@import "tailwindcss";
+
+:root {
+  --primary: #c0392b;
+  --primary-dark: #922b21;
+  --primary-light: #e74c3c;
+  --bg: #ffffff;
+  --bg-gray: #f2f2f2;
+  --text: #222222;
+  --text-muted: #666666;
+  --border: #e0e0e0;
+  --green: #1a9e3f;
+  --red: #d32f2f;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  background: var(--bg-gray);
+  color: var(--text);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.ticker-wrapper {
+  overflow: hidden;
+  position: relative;
+}
+
+.ticker-track {
+  display: flex;
+  animation: ticker-scroll 60s linear infinite;
+  will-change: transform;
+}
+
+.ticker-track:hover { animation-play-state: paused; }
+
+@keyframes ticker-scroll {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.up   { color: var(--green); }
+.down { color: var(--red); }
+
+.section-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #111;
+  border-left: 3px solid var(--primary);
+  padding-left: 8px;
+  margin-bottom: 10px;
+}
+
+.news-row {
+  border-bottom: 1px solid var(--border);
+  padding: 8px 0;
+}
+.news-row:last-child { border-bottom: none; }
+
+a { text-decoration: none; color: inherit; }
+a:hover { color: var(--primary); }
