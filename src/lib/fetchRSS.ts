@@ -120,6 +120,21 @@ function timeAgo(dateStr: string): string {
   return `${Math.floor(diff / 86400)}d ago`;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function extractImage(item: any): string | undefined {
+  try {
+    return (
+      item?.['media:content']?.['$']?.url ||
+      item?.['media:content']?.url ||
+      item?.['media:thumbnail']?.['$']?.url ||
+      item?.['enclosure']?.url ||
+      undefined
+    );
+  } catch {
+    return undefined;
+  }
+}
+
 async function fetchFeedWithFallback(feed: typeof FEEDS[0]): Promise<RSSArticle[]> {
   for (const url of feed.urls) {
     try {
@@ -139,11 +154,7 @@ async function fetchFeedWithFallback(feed: typeof FEEDS[0]): Promise<RSSArticle[
         category: feed.category,
         source: feed.source,
         sourceLogo: feed.sourceLogo,
-        image:
-          (item as Record<string, unknown>)?.['media:content']?.['$']?.url ||
-          (item as Record<string, unknown>)?.['media:thumbnail']?.['$']?.url ||
-          (item as Record<string, unknown>)?.['enclosure']?.url ||
-          undefined,
+        image: extractImage(item),
       }));
     } catch (err) {
       console.warn(`⚠️  ${feed.source} → ${url} : ${(err as Error).message}`);
