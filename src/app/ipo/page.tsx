@@ -198,7 +198,7 @@ export default function IPOPage() {
     sme: data?.sme?.length ?? 0,
     ncd: data?.ncds?.length ?? 0,
     rights: data?.rights?.length ?? 0,
-    brokers: BROKERS.length,
+    brokers: 0,
   };
 
   return (
