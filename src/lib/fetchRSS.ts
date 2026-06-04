@@ -121,19 +121,9 @@ function timeAgo(dateStr: string): string {
 }
 
 async function fetchFeedWithFallback(feed: typeof FEEDS[0]): Promise<RSSArticle[]> {
-  // Suppress legacy url.parse() deprecation warning from rss-parser internals
-  const origEmit = process.emit.bind(process);
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  (process as any).emit = (event: string, ...args: unknown[]) => {
-    if (event === 'warning' && (args[0] as NodeJS.ErrnoException)?.name === 'DeprecationWarning') return false;
-    return origEmit(event, ...args);
-  };
-
   for (const url of feed.urls) {
     try {
       const result = await parser.parseURL(url);
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (process as any).emit = origEmit; // restore
       if (!result.items?.length) continue;
       console.log(`✅ ${feed.source}: ${result.items.length} items`);
       return result.items.map((item, i) => ({
@@ -159,8 +149,6 @@ async function fetchFeedWithFallback(feed: typeof FEEDS[0]): Promise<RSSArticle[
       console.warn(`⚠️  ${feed.source} → ${url} : ${(err as Error).message}`);
     }
   }
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  (process as any).emit = origEmit; // restore
   console.warn(`⚠️  ${feed.source}: all URLs failed — skipping`);
   return [];
 }
